@@ -8,7 +8,8 @@ public:
     ~stone();
 
     //棋子的基本属性
-    enum type{Jiang,Shi,Xiang,Ma,Che,Pao,Bing};
+    enum type{BJIANG, BSHI,BZU, BPAO, BMA, BXIANG, BJU,
+            RSHUAI, RSHI,RBING, RPAO, RMA,RXIANG, RJU};
     int _row;
     int _col;
     int _id;//独一无二

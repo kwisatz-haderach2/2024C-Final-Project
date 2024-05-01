@@ -23,6 +23,12 @@
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>人机模式</string>
     </property>
@@ -35,6 +41,12 @@
       <width>131</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>16</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>双人模式</string>
