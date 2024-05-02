@@ -12,7 +12,7 @@ public:
     stone _s[32];
     int _r;//棋子半径
     int _selected;
-
+    bool turnto_red;
 
     void paintEvent(QPaintEvent*);//棋盘
     void drawstone(QPainter&painter,int id);//棋子
@@ -24,16 +24,19 @@ public:
     bool getRowCol(QPoint pt,int&row,int&col); //获取行列坐标
 
     bool canMove(int moveid,int row,int col,int killid );
-    bool canMove1(int moveid,int row,int col,int killid );
-    bool canMove2(int moveid,int row,int col,int killid );
-    bool canMove3(int moveid,int row,int col,int killid );
-    bool canMove4(int moveid,int row,int col,int killid );
-    bool canMove5(int moveid,int row,int col,int killid );
-    bool canMove6(int moveid,int row,int col,int killid );
-    bool canMove7(int moveid,int row,int col,int killid );
+    bool canMoveJiang(int moveid,int row,int col );
+    bool canMoveShi(int moveid,int row,int col );
+    bool canMoveChe(int moveid,int row,int col );
+    bool canMoveMa(int moveid,int row,int col );
+    bool canMovePao(int moveid,int row,int col ,int killid);
+    bool canMoveXiang(int moveid,int row,int col );
+    bool canMoveZu(int moveid,int row,int col );
 
-
+    bool tryGo(int moveid,int row,int col ,int killid);
+    int stoneAtLine(int row, int col, int prerow, int precol);
+    int stoneOccupies(int row,int col);
 signals:
+
 };
 
 #endif // BOARD_H

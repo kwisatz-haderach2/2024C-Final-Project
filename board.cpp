@@ -6,12 +6,13 @@
 Board::Board(QWidget *parent)
     : QWidget{parent}
 {
+
     //调用函数初始化
     for(int i=0;i<32;i++){
         _s[i].initialize(i);
     }
 
-
+    turnto_red=true;
     _selected=-1;
 }
 
@@ -123,21 +124,21 @@ bool Board::getRowCol(QPoint pt ,int& row,int&col){
 
 //走法
 //将
-bool Board::canMove1(int moveid,int row,int col,int killid ){
+bool Board::canMoveJiang(int moveid,int row,int col){
     //红黑
     if(_s[moveid]._camp){
-        if(row>2)
+        if(row<7)
             return false;
     }
     else{
-        if(row<7)
+        if(row>2)
             return false;
     }
     if(col<3||col>5)
         return false;
 
     //一次走一格
-    int dx= abs(_s[moveid]._row - row);
+    int dx = abs(_s[moveid]._row - row);
     int dy = abs(_s[moveid]._col - col);
     if ((dx == 1 && dy== 0) || (dx == 0 && dy == 1))
         return true;
@@ -145,15 +146,15 @@ bool Board::canMove1(int moveid,int row,int col,int killid ){
     return false;
 }
 //士
-bool Board::canMove2(int moveid,int row,int col,int killid ){
+bool Board::canMoveShi(int moveid,int row,int col ){
 
     //红黑
     if(_s[moveid]._camp){
-        if(row>2)
+        if(row<7)
             return false;
     }
     else{
-        if(row<7)
+        if(row>2)
             return false;
     }
     if(col<3||col>5)
@@ -168,65 +169,226 @@ bool Board::canMove2(int moveid,int row,int col,int killid ){
     return false;
 }
 //车
-bool Board::canMove3(int moveid,int row,int col,int killid ){
-    return true;
+bool Board::canMoveChe(int moveid,int row,int col ){
+
+    //车只能走直线，而且不能跳子
+    int dx= abs(_s[moveid]._row - row);
+    int dy = abs(_s[moveid]._col - col);
+    if ((!dx || !dy) && !stoneAtLine(row, col, _s[moveid]._row, _s[moveid]._col))
+        return true;
+    return false;
 }
 //马
-bool Board::canMove4(int moveid,int row,int col,int killid ){
-    return true;
+bool Board::canMoveMa(int moveid,int row,int col ){
+
+    int dx= abs(_s[moveid]._row - row);
+    int dy = abs(_s[moveid]._col - col);
+    //行列走法
+    if(dx==1&&dy==2){
+        if(stoneOccupies(_s[moveid]._row,(_s[moveid]._col+col)/2)==-1)
+            return true;
+    }
+    if(dx==2&&dy==1){
+        if(stoneOccupies((_s[moveid]._row+row)/2,_s[moveid]._col)==-1)
+            return true;
+    }
+
+    return false;
 }
 //炮
-bool Board::canMove5(int moveid,int row,int col,int killid ){
-    return true;
+bool Board::canMovePao(int moveid,int row,int col,int killid){
+
+    //吃棋
+    if(killid!=-1 && stoneAtLine(_s[moveid]._row,_s[moveid]._col,row,col)==1){
+        return true;
+    }
+    //不吃棋
+    if(killid==-1 && stoneAtLine(_s[moveid]._row,_s[moveid]._col,row,col)==0)
+        return true;
+    return false;
 }
 //相
-bool Board::canMove6(int moveid,int row,int col,int killid ){
+bool Board::canMoveXiang(int moveid,int row,int col ){
+
+    int dx= abs(_s[moveid]._row - row);
+    int dy = abs(_s[moveid]._col - col);
+    if (dx != 2 || dy != 2)
+        return false;
+
+    //蹩相腿
+    int mx=(_s[moveid]._row+row)/2;
+    int my=(_s[moveid]._col+col)/2;
+    if(stoneOccupies(mx,my)!=-1)
+        return false;
+    //不能过河
+    if (_s[moveid]._camp)
+    {
+        if (row < 4)
+            return false;
+    }
+    else
+    {
+        if (row > 5)
+            return false;
+    }
+
     return true;
+
 }
 //卒
-bool Board::canMove7(int moveid,int row,int col,int killid ){
-    return true;
+bool Board::canMoveZu(int moveid,int row,int col ){
+    //未过楚河汉界之前，只能前进；过后，可前后左右移动；每次只能移动一格
+    int dx = _s[moveid]._row - row;
+    int absdx = abs(_s[moveid]._row - row);
+    int absdy = abs(_s[moveid]._col - col);
+    //红方
+    if(_s[moveid]._camp){
+        if(row>4){
+            if (dx == 1 && absdy == 0)
+                return true;
+        }
+        else if(row<5){
+            if ((absdx == 1 && absdy == 0) || (absdy == 1 && absdx == 0))
+                return true;
+        }
+    }
+    //黑子
+    else{
+        if(row < 5){
+            if (dx == -1 && absdy == 0)
+                return true;
+        }
+        else if(row>4){
+            if ((absdx == 1 && absdy == 0) || (absdy == 1 && absdx == 0))
+                return true;
+        }
+    }
+
+    return false;
 }
 
+//某个位置是否有棋子，有的话返回id
+int Board::stoneOccupies(int row, int col)
+{
+    //遍历棋子
+    for (int i = 0; i < 32; i++)
+    {
+        if (_s[i]._row == row && _s[i]._col == col && !_s[i]._dead)
+            return i;
+    }
+    return -1;
+}
+
+//同行/列两点之间之间棋子的个数 将帅，炮
+int Board::stoneAtLine(int row1, int col1, int row2, int col2)
+{
+    int num = 0;
+    //不在同一行/列
+    if (row1 != row2 && col1 != col2)
+        return -1;
+    //两点重合，未移动
+    if (row1 == row2 && col1 == col2)
+        return -1;
+    //同一行，两点之间按列遍历，每点判断是否有棋子
+    if (row1 == row2)
+    {
+        int min = col1 < col2 ? col1 : col2;
+        int max = col1 < col2 ? col2 : col1;
+        for (int i = min + 1; i < max; i++)
+        {
+            if (stoneOccupies(row1, i) != -1)
+                num++;
+        }
+    }
+    //同一列，两点之间按行遍历，每点判断是否有棋子
+    else
+    {
+        int min = row1 < row2 ? row1 : row2;
+        int max = row1 < row2 ? row2 : row1;
+        for (int i = min + 1; i < max; i++)
+        {
+            if (stoneOccupies(i, col1) != -1)
+                num++;
+        }
+    }
+    return num;
+}
+
+//试走棋
+bool Board::tryGo(int moveid,int row,int col ,int killid)
+{
+    //暂时存储
+    int temprow = _s[moveid]._row;
+    int tempcol = _s[moveid]._col;
+    _s[moveid]._row = row;
+    _s[moveid]._col = col;
+
+
+    if (killid > 0)
+        _s[killid]._dead = true;
+
+    //如果走棋后将帅会面
+
+
+    bool b = true;
+    //若在同一列，中间无子，且都活着
+    if (_s[4]._col == _s[20]._col && stoneAtLine(_s[4]._row, _s[4]._col, _s[20]._row, _s[20]._col) == 0 && !_s[4]._dead && !_s[20]._dead)
+    {
+        _s[moveid]._row = temprow;
+        _s[moveid]._col = tempcol;
+        b = false;
+    }
+    _s[moveid]._row = temprow;
+    _s[moveid]._col = tempcol;
+    if (killid > 0)
+        _s[killid]._dead = false;
+    return b;
+}
+
+
 bool Board::canMove(int moveid,int row,int col,int killid ){
-    if(_s[moveid]._camp==_s[killid]._camp){
+    //共同要求，将帅不碰面，不同色
+    if(killid!=-1&&_s[moveid]._camp==_s[killid]._camp){
         //换选择
         _selected=killid;
         update();
         return false;
 
     }
-
-
+    if (!tryGo(moveid,row,col,killid))
+    {
+        return false;
+    }
+    //每种棋子
     switch (_s[ moveid]._type)
     {
     case stone::RSHUAI:
     case stone::BJIANG:
-        return canMove1(moveid, row, col,killid);
+        return canMoveJiang(moveid, row, col);
         break;
     case stone::RSHI:
     case stone::BSHI:
-        return canMove2(moveid, row, col,killid);
+        return canMoveShi(moveid, row, col);
         break;
     case stone::RJU:
     case stone::BJU:
-        return canMove3( moveid, row, col,killid);
+        return canMoveChe( moveid, row, col);
         break;
     case stone::BMA:
     case stone::RMA:
-        return canMove4( moveid, row, col,killid);
+        return canMoveMa( moveid, row, col);
         break;
     case stone::BPAO:
     case stone::RPAO:
-        return canMove5( moveid, row, col, killid);
+        return canMovePao( moveid, row, col,killid);
         break;
     case stone::RXIANG:
     case stone::BXIANG:
-        return canMove6( moveid, row, col,killid);
+        return canMoveXiang( moveid, row, col);
         break;
     case stone::BZU:
     case stone::RBING:
-        return canMove7( moveid, row, col,killid);
+        return canMoveZu( moveid, row, col);
         break;
     }
     return true;
@@ -236,9 +398,9 @@ bool Board::canMove(int moveid,int row,int col,int killid ){
 //第二次是否点击到棋子，未点击棋子，点击交叉点还是棋盘外
 //不对，第一次点击中了棋子，那就是不能放下选择其他的，否则是悔棋！！！
 //每次点击屏幕，都会调用该函数
-void Board::mouseReleaseEvent(QMouseEvent *ev){
+void Board::mouseReleaseEvent(QMouseEvent *m){
     //获取鼠标位置，pt代表象棋的行列值
-    QPoint pt=ev->pos();
+    QPoint pt=m->pos();
 
     //判断有无棋子
     int row,col;//交叉点坐标，调用getRowCol会改值，成为棋子坐标
@@ -253,8 +415,6 @@ void Board::mouseReleaseEvent(QMouseEvent *ev){
     if(Ret==false){
         return;
     }
-
-
 
     int i;
     int _clicked=-1;
@@ -275,13 +435,16 @@ void Board::mouseReleaseEvent(QMouseEvent *ev){
 
     //若第一次点击
     if(_selected==-1){
-        //clickded若不等于-1，则点击到某一交叉点，而不是棋盘外
+        //clickded若不等于-1，则点击到某一棋子，而不是棋盘外
         if(_clicked!=-1){
-            _selected=_clicked;//确定第一次点击的谁，选中了这个棋子
-            update();//然后在update后更新该棋子的颜色
+            if(turnto_red ==_s[_clicked]._camp){
+                _selected=_clicked;//确定第一次点击的谁，选中了这个棋子
+                update();//然后在update后更新该棋子的颜色
+            }
+
         }
 
-        //若第一次点击到棋盘外
+        //若第一次点击到棋盘外或者未点击棋子
         //实际上在此mouseReleaseEvent调用时Ret就未false不会进来
         //也就不需要else
     }
@@ -293,11 +456,11 @@ void Board::mouseReleaseEvent(QMouseEvent *ev){
             _s[_selected]._row=row;
             _s[_selected]._col=col;
 
-            //要是第二次的点击的位置有棋子，注意：并且还得是对方棋子
             //杀掉第二次选的棋子
             if(_clicked!=-1){//click!=-1就说明选中了棋子，且不是同一方
                 _s[_clicked]._dead=true;
             }
+            turnto_red=!turnto_red;
             _selected=-1;
             update();
         }
