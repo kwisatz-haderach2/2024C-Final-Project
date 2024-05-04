@@ -19,12 +19,20 @@ start::~start()
     delete ui;
 }
 
-
-
-void start::on_pushButton_ManMachine_clicked()
+void start::on_pushButton_ManMan_clicked()
 {
     this->close();
     b=new Board();
     b->show();
 }
+
+
+void start::on_pushButton_ManMachine_clicked()
+{
+    this->close();
+    c=new singleGame();
+    c->show();
+
+}
+
 

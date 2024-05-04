@@ -1,8 +1,8 @@
 #ifndef START_H
 #define START_H
-
+#include"Board.h"
+#include"singlegame.h"
 #include <QMainWindow>
-#include "board.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,13 +20,17 @@ public:
 
 private slots:
 
-
+    void on_pushButton_ManMan_clicked();
 
     void on_pushButton_ManMachine_clicked();
 
 private:
     Ui::start *ui;
-    Board*b=new Board;
+
+    Board *b=new Board;
+
+    singleGame *c=new singleGame ;
+
 };
 #endif // START_H
 

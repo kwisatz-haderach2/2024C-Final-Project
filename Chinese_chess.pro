@@ -9,19 +9,22 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Board.cpp \
     Start.cpp \
-    board.cpp \
+    Stone.cpp \
     main.cpp \
-    stone.cpp
+    singlegame.cpp \
+    step.cpp
 
 HEADERS += \
+    Board.h \
     Start.h \
-    board.h \
-    stone.h
+    Stone.h \
+    singlegame.h \
+    step.h
 
 FORMS += \
-    Start.ui \
-    board.ui
+    Start.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

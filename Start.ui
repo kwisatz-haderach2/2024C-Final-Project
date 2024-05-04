@@ -6,38 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>492</width>
-    <height>364</height>
+    <width>588</width>
+    <height>456</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>start</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton_ManMachine">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>190</y>
-      <width>131</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>楷体</family>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>人机模式</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_ManMan">
     <property name="geometry">
      <rect>
       <x>250</x>
-      <y>240</y>
+      <y>190</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -77,13 +58,32 @@
      <pixmap resource="res.qrc">:/image/res/R__2_-removebg-preview.png</pixmap>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_ManMachine">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>240</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>楷体</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>人机模式</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>492</width>
+     <width>588</width>
      <height>17</height>
     </rect>
    </property>
