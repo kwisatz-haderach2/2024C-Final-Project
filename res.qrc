@@ -1,12 +1,12 @@
 <RCC>
     <qresource prefix="/music">
-        <file>res/background_music.mp3</file>
+        <file>res/background_music.wav</file>
+        <file>res/piece_move.wav</file>
     </qresource>
     <qresource prefix="/image">
-        <file>res/R__1_-removebg-preview.png</file>
-        <file>res/R__2_-removebg-preview.png</file>
+        <file>res/OIP-removebg-preview.png</file>
+        <file>res/R-removebg-preview.png</file>
+        <file>res/1.png</file>
     </qresource>
-    <qresource prefix="/icon">
-        <file>res/music_icon.png</file>
-    </qresource>
+    <qresource prefix="/icon"/>
 </RCC>

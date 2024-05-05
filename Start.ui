@@ -6,19 +6,44 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>588</width>
-    <height>456</height>
+    <width>641</width>
+    <height>556</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>隶书</family>
+    <pointsize>14</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>start</string>
+   <string>中国象棋</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res.qrc">
+    <normaloff>:/image/res/OIP-removebg-preview.png</normaloff>:/image/res/OIP-removebg-preview.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#centralwidget{border-image:url(:/image/res/1.png)}</string>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>50</width>
+    <height>50</height>
+   </size>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="pushButton_ManMan">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>190</y>
+      <x>230</x>
+      <y>400</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -26,8 +51,11 @@
     <property name="font">
      <font>
       <family>楷体</family>
-      <pointsize>16</pointsize>
+      <pointsize>20</pointsize>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>双人模式</string>
@@ -36,10 +64,10 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>30</y>
-      <width>221</width>
-      <height>71</height>
+      <x>80</x>
+      <y>70</y>
+      <width>431</width>
+      <height>181</height>
      </rect>
     </property>
     <property name="baseSize">
@@ -49,20 +77,20 @@
      </size>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-image: url(:/image/C:/Users/28584/Desktop/res/R__2_-removebg-preview.png);</string>
+     <string notr="true">#label{border-image: url(:/image/C:/Users/28584/Desktop/res/R__2_-removebg-preview.png);}</string>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="res.qrc">:/image/res/R__2_-removebg-preview.png</pixmap>
+     <pixmap resource="res.qrc">:/image/res/R-removebg-preview.png</pixmap>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_ManMachine">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>240</y>
+      <x>230</x>
+      <y>460</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -70,23 +98,16 @@
     <property name="font">
      <font>
       <family>楷体</family>
-      <pointsize>16</pointsize>
+      <pointsize>20</pointsize>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>人机模式</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>588</width>
-     <height>17</height>
-    </rect>
-   </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

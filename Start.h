@@ -1,7 +1,7 @@
 #ifndef START_H
 #define START_H
 #include"Board.h"
-#include"singlegame.h"
+#include"Singlegame.h"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -17,6 +17,8 @@ class start : public QMainWindow
 public:
     start(QWidget *parent = nullptr);
     ~start();
+
+
 
 private slots:
 

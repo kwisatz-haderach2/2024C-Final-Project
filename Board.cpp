@@ -2,11 +2,48 @@
 #include <QPainter>
 #include<QMouseEvent>
 #include <QMessageBox>
+#include<QSoundEffect>
 
+#include<QIcon>
+#include<QSoundEffect>
+#include<QPushButton>
+
+
+QSoundEffect*musiccc=new QSoundEffect;
 Board::Board(QWidget *parent)
     : QWidget{parent}
 
 {
+//音乐
+    musiccc->setSource(QUrl::fromLocalFile(":/music/res/background_music.wav"));
+    musiccc->setLoopCount(QSoundEffect::Infinite);  //设置无限循环
+    musiccc->setVolume(0.3f);  //设置音量，在0到1之间
+    musiccc->play();
+
+
+    QPushButton*btn_play=new QPushButton;
+    btn_play->setParent(this);
+    btn_play->setText("播放");
+    btn_play->setFont(QFont("楷体",20));
+    btn_play->move(500,250);
+
+    QPushButton*btn_stop=new QPushButton;
+    btn_stop->setParent(this);
+    btn_stop->setText("暂停");
+    btn_stop->setFont(QFont("楷体",20));
+    btn_stop->move(500,300);
+
+    connect(btn_play,&QPushButton::clicked,musiccc,&QSoundEffect::play);
+    connect(btn_stop,&QPushButton::clicked,musiccc,&QSoundEffect::stop);
+
+//设置界面大小
+    this->resize(600,550);
+
+//图标
+
+    this->setWindowIcon(QIcon(":/image/res/OIP-removebg-preview.png"));
+    this->setWindowTitle("行一棋不足以见智，弹一弦不足以见悲。——淮南子");
+
 
     //调用函数初始化
     for(int i=0;i<32;i++){
@@ -22,7 +59,12 @@ void Board::paintEvent(QPaintEvent*)
 {
 
 
+
     QPainter painter(this);
+    QPixmap pixmap(":/image/res/1.png");
+    painter.drawPixmap(this->rect(),pixmap);
+
+
     QPen pen;
 
     //外棋盘，黑色
@@ -55,16 +97,16 @@ void Board::paintEvent(QPaintEvent*)
     painter.drawLine(QPoint(4*_offSet,8*_offSet),QPoint(6*_offSet,10*_offSet));
     painter.drawLine(QPoint(6*_offSet,8*_offSet),QPoint(4*_offSet,10*_offSet));
     //楚河汉界
-    painter.setFont(QFont("隶书",40,800));
-    painter.setPen(QColor(150,150,150));
-    painter.drawText(QPoint(2*_offSet,6*_offSet),"楚河");
-    painter.drawText(QPoint(6*_offSet,6*_offSet),"汉界");
+    painter.setFont(QFont("隶书",50,600));
+    painter.setPen(QColor(0,0,0));
+    painter.drawText(QPoint(2*_offSet,6*_offSet-3),"楚河");
+    painter.drawText(QPoint(6*_offSet,6*_offSet-3),"汉界");
 
     //绘制直角
     //外棋盘，黑色
+
     pen.setWidth(1);
     painter.setPen(pen);
-    painter.setPen(QColor(0,0,0));
     rightSingle(painter,center(2,1),2);
     rightSingle(painter,center(2,7),2);
     rightSingle(painter,center(7,1),2);
@@ -101,13 +143,7 @@ void Board::drawstone(QPainter&painter,int id){
     QRect rect=QRect(c.x()-_r,c.y()-_r,_r*2,_r*2);//左侧，上侧，长，宽
 
     //3.上色+轮廓+汉字
-    //上色，被选中灰色，一般黄色
-    if(id==_selected){//如果是第一次点击的棋子
-        painter.setBrush(QBrush(Qt::gray));
-    }
-    else{
-        painter.setBrush(QBrush(Qt::yellow));
-    }
+    painter.setBrush(QBrush(Qt::yellow));
 
     //画外面的圆
     painter.setPen(Qt::black);//每次画都要更新一下笔
@@ -137,24 +173,26 @@ QPoint Board::center(int id){
 
 //绘制直角,int r_or_f,0,1,2,有右侧，左侧，全有
 void Board::rightSingle(QPainter& painter,QPoint id,int r_or_f){
-    painter.setPen(QColor(128,128,128));
+
+    painter.setPen(QColor(0,0,0));
+
     //有右侧，全有
     if(r_or_f!=1){
         //右上
-        painter.drawLine(id.x()+5,id.y()-5,id.x()+5  ,id.y()-5-25);//竖直
-        painter.drawLine(id.x()+5,id.y()-5,id.x()+5+25,id.y()-5);//水平
+        painter.drawLine(id.x()+5,id.y()-5,id.x()+5  ,id.y()-5-10);//竖直
+        painter.drawLine(id.x()+5,id.y()-5,id.x()+5+10,id.y()-5);//水平
         //右下
-        painter.drawLine(id.x()+5,id.y()+5,id.x()+5  ,id.y()+5+25);//竖直
-        painter.drawLine(id.x()+5,id.y()+5,id.x()+5+25,id.y()+5);//水平
+        painter.drawLine(id.x()+5,id.y()+5,id.x()+5  ,id.y()+5+10);//竖直
+        painter.drawLine(id.x()+5,id.y()+5,id.x()+5+10,id.y()+5);//水平
     }
     //有左侧，全有
     if(r_or_f!=0){
         //左上
-        painter.drawLine(id.x()-5,id.y()-5,id.x()-5  ,id.y()-5-25);
-        painter.drawLine(id.x()-5,id.y()-5,id.x()-5-25,id.y()-5);
+        painter.drawLine(id.x()-5,id.y()-5,id.x()-5  ,id.y()-5-10);
+        painter.drawLine(id.x()-5,id.y()-5,id.x()-5-10,id.y()-5);
         //左下
-        painter.drawLine(id.x()-5,id.y()+5,id.x()-5  ,id.y()+5+25);
-        painter.drawLine(id.x()-5,id.y()+5,id.x()-5-25,id.y()+5);
+        painter.drawLine(id.x()-5,id.y()+5,id.x()-5  ,id.y()+5+10);
+        painter.drawLine(id.x()-5,id.y()+5,id.x()-5-10,id.y()+5);
     }
 
 }
@@ -507,6 +545,13 @@ void Board::click(int row,int col,int _clicked){
     //          到棋子，吃
     else{
         if(canMove(_selected,row,col,_clicked)){
+
+            //走棋音效
+            QSoundEffect *music2 = new QSoundEffect();
+            music2->setSource(QUrl::fromLocalFile(":/music/res/piece_move.wav"));
+            music2->setLoopCount(1);  //设置无限循环
+            music2->setVolume(0.5f);  //设置音量，在0到1之间
+            music2->play();
             //先移动第一次点击的棋子
             _s[_selected]._row=row;
             _s[_selected]._col=col;
@@ -526,30 +571,64 @@ void Board::click(int row,int col,int _clicked){
 }
 
 void Board::victory(){
+
+    //红方胜利
     if (_s[4]._dead)
     {
-        QMessageBox::information(this, QStringLiteral("棋局结束"),
-                                 QStringLiteral("<p></span><p align='center'><span style='color: rgb(255, 0, 0); font-size: 28px;font-family:STXingkai; '>红方胜利</span></p>") + char(10) + QStringLiteral("<p></span><p align='center'><span style='color: rgb(0, 0, 0); font-size: 15px;font-family: Lucida Calligraphy; '>Wit beyond measure is man's greatest treasure.</span></p>"),
-                                 QStringLiteral("再来一局"));
-        //初始化
-        _selected = -1;
-        turnto_red = true;
-        for (int i = 0; i < 32; i++)
-        {
-            _s[i].initialize(i);
+        musiccc->stop();
+
+        QMessageBox:: StandardButton result=
+            QMessageBox::question(this, tr("中国象棋"),
+                                  tr("红方胜利,你要再来一局吗"),
+                                  QMessageBox::Yes| QMessageBox::No,
+                                  QMessageBox::Yes);
+
+        switch (result){
+            case QMessageBox::Yes:
+            //初始化
+                musiccc->play();
+                _selected = -1;
+                turnto_red = true;
+                for (int i = 0; i < 32; i++){
+                    _s[i].initialize(i);
+                }
+                break;
+            case QMessageBox::No:
+                //退出
+                this->close();
+                break;
+            default:
+                break;
         }
+
     }
     //黑方胜利
     else if (_s[20]._dead)
     {
-        QMessageBox::information(this, QStringLiteral("棋局结束"),
-                                 QStringLiteral("<p></span><p align='center'><span style='color: rgb(0, 0, 0); font-size: 28px;font-family:STXingkai; '>黑方胜利</span></p>") + char(10) + QStringLiteral("<p></span><p align='center'><span style='color: rgb(0, 0, 0); font-size: 15px;font-family: Lucida Calligraphy; '>Wit beyond measure is man's greatest treasure.</span></p>"),
-                                 QStringLiteral("再来一局"));
-        //初始化
-        turnto_red = true;
-        for (int i = 0; i < 32; i++)
-        {
-            _s[i].initialize(i);
+        musiccc->stop();
+
+        QMessageBox:: StandardButton result=
+            QMessageBox::question(this, tr("中国象棋"),
+                                  tr("黑方胜利,你要再来一局吗"),
+                                  QMessageBox::Yes| QMessageBox::No,
+                                  QMessageBox::Yes);
+
+        switch (result){
+        case QMessageBox::Yes:
+            //初始化
+            musiccc->play();
+            _selected = -1;
+            turnto_red = true;
+            for (int i = 0; i < 32; i++){
+                _s[i].initialize(i);
+            }
+            break;
+        case QMessageBox::No:
+            //退出
+            this->close();
+            break;
+        default:
+            break;
         }
     }
 

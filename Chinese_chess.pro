@@ -1,5 +1,6 @@
 QT       += core gui
-QT       += multimediawidgets
+QT       += multimedia
+CONFIG+=resources_big
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
@@ -10,17 +11,17 @@ CONFIG += c++17
 
 SOURCES += \
     Board.cpp \
+    Singlegame.cpp \
     Start.cpp \
     Stone.cpp \
     main.cpp \
-    singlegame.cpp \
     step.cpp
 
 HEADERS += \
     Board.h \
+    Singlegame.h \
     Start.h \
     Stone.h \
-    singlegame.h \
     step.h
 
 FORMS += \
