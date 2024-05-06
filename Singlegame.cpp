@@ -8,7 +8,7 @@ void singleGame::click(int row, int col,int _clicked)
 {
     if (!turnto_red)
         return;
-    //红棋由人走棋，调用Chess类的click函数
+    //红棋由人走棋，调用board类的click函数
     Board::click(row, col,_clicked);
     //红棋走完轮到黑棋，由机器给出走法
     if (!turnto_red)

@@ -17,13 +17,13 @@ public:
     void getAllarea(QVector<Step *> &steps);               //获取可移动范围
     void saveSteps(int, int, int, int, QVector<Step *> &); //存棋
 
-    void fakemove(Step *);
-    void backfakemove(Step *);
+    void fakemove(Step *);//试走
+    void backfakemove(Step *);//恢复状态
 
-    Step *getBestScore();
-    int getMinScore(int, int);
+    Step *getBestScore();//最优方法
+    int getMinScore(int, int);//每个节点的最值
     int getMaxScore(int, int);
-    int finalScore();
+    int finalScore();//这种方法的最后得分
 
 signals:
 public slots:

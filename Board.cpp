@@ -3,7 +3,7 @@
 #include<QMouseEvent>
 #include <QMessageBox>
 #include<QSoundEffect>
-
+#include<QLabel>
 #include<QIcon>
 #include<QSoundEffect>
 #include<QPushButton>
@@ -14,6 +14,8 @@ Board::Board(QWidget *parent)
     : QWidget{parent}
 
 {
+    //界面大小
+    this->resize(600,550);
 //音乐
     musiccc->setSource(QUrl::fromLocalFile(":/music/res/background_music.wav"));
     musiccc->setLoopCount(QSoundEffect::Infinite);  //设置无限循环
@@ -36,8 +38,7 @@ Board::Board(QWidget *parent)
     connect(btn_play,&QPushButton::clicked,musiccc,&QSoundEffect::play);
     connect(btn_stop,&QPushButton::clicked,musiccc,&QSoundEffect::stop);
 
-//设置界面大小
-    this->resize(600,550);
+
 
 //图标
 
@@ -126,6 +127,8 @@ void Board::paintEvent(QPaintEvent*)
     for(int i=0;i<32;i++){
         drawstone(painter,i);
     }
+
+
 }
 
 
@@ -561,6 +564,10 @@ void Board::click(int row,int col,int _clicked){
                 _s[_clicked]._dead=true;
             }
             turnto_red=!turnto_red;
+
+
+
+
             _selected=-1;
 
             victory();

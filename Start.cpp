@@ -16,7 +16,7 @@ start::start(QWidget *parent)
 
     this->setWindowIcon(QIcon(":/image/res/OIP-removebg-preview.png"));
     this->setWindowIconText("中国象棋");
-//背景
+    //背景
     QPixmap *pixmap = new QPixmap(":/image/res/R-removebg-preview.png");
     pixmap->scaled(ui->label->size(), Qt::KeepAspectRatio);
     ui->label->setScaledContents(true);
